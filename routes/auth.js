@@ -13,8 +13,7 @@ router.get('/google/callback',
         failureRedirect: '/' 
     }),
     (req, res) => {
-        // Successful authentication, redirect to dashboard.
-        console.log('Successful Authentication')
+        // Successful authentication, redirects to dashboard.
         res.redirect('/dashboard')
     }
 )
@@ -22,10 +21,10 @@ router.get('/google/callback',
 // @desc Logout user
 // @route /auth/logout
 router.get('/logout', (req, res) => {
-    req.logout(req.user, err => {
-        if(err) return next(err);
+    req.logout(err => {
+        if(err) console.error(err)
     })
-    res.redirect("/");
+    res.redirect('/')
 })
 
 module.exports = router
