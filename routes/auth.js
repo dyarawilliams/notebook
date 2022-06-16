@@ -14,9 +14,18 @@ router.get('/google/callback',
     }),
     (req, res) => {
         // Successful authentication, redirect to dashboard.
-        console.log('Successful authentication redirect to dashboard')
+        console.log('Successful Authentication')
         res.redirect('/dashboard')
     }
 )
+
+// @desc Logout user
+// @route /auth/logout
+router.get('/logout', (req, res) => {
+    req.logout(req.user, err => {
+        if(err) return next(err);
+    })
+    res.redirect("/");
+})
 
 module.exports = router
