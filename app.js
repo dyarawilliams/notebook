@@ -26,23 +26,24 @@ if(process.env.NODE_ENV === 'development') {
 }
 
 // Handlebars
-app.engine('hbs', exphbs({
+app.engine('.hbs', exphbs.engine({
     defaultLayout: 'main',
     extname: '.hbs'
 }));
-app.set('view engine', 'hbs');
-app.set('views', './views');
+app.set('view engine', '.hbs');
+// app.set('views', './views');
 
 // Sessions
 app.use(session({
     secret: 'keyboard cat',
     resave: false, 
     saveUninitialized: false,
-    cookie: { secure: true }
+    // cookie: { secure: true },
+    // store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 
 // Passport middleware
-app.use(passport.initialize())
+app.use(passport.initialize()) 
 app.use(passport.session())
 
 // Static folder 
