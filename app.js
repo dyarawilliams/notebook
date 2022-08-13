@@ -8,9 +8,6 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const connectDB = require('./config/db')
 
-const mainRouter = require('./routes/index')
-const authRouter = require('./routes/auth')
-
 // Load config
 dotenv.config({ path: './config/config.env' })
 
@@ -21,13 +18,25 @@ connectDB()
 
 const app = express()
 
+// Body parser
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+
 // Logging
 if(process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'))
 }
 
+// Handlebars Helper
+const{ formatDate, stripTags, truncate } = require('./helpers/hbs')
+
 // Handlebars
 app.engine('.hbs', exphbs.engine({
+    helpers: {
+        formatDate,
+        stripTags,
+        truncate,
+    },
     defaultLayout: 'main',
     extname: '.hbs'
 }));
@@ -51,8 +60,9 @@ app.use(passport.session())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // Routes 
-app.use('/', mainRouter)
-app.use('/auth', authRouter)
+app.use('/', require('./routes/index'))
+app.use('/auth', require('./routes/auth'))
+app.use('/stories', require('./routes/stories'))
 
 const PORT = process.env.PORT || 3000
 
